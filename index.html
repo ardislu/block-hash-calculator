@@ -160,7 +160,7 @@
       }
 
       // Shapella hard fork
-      // https://eips.ethereum.org/EIPS/eip-6465#execution-block-header-changes
+      // https://eips.ethereum.org/EIPS/eip-4895#new-field-in-the-execution-payload-header-withdrawals-root
       if (block?.withdrawalsRoot) {
         header.push(block.withdrawalsRoot);
       }
@@ -170,9 +170,14 @@
       if (block?.blobGasUsed) {
         header.push(
           BigInt(block.blobGasUsed),
-          BigInt(block.excessBlobGas),
-          block.parentBeaconBlockRoot
+          BigInt(block.excessBlobGas)
         );
+      }
+
+      // Dencun hard fork
+      // https://eips.ethereum.org/EIPS/eip-4788#block-structure-and-validity
+      if (block?.parentBeaconBlockRoot) {
+        header.push(block.parentBeaconBlockRoot);
       }
 
       const rlp = RLP.encode(header);
