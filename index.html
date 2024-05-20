@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="modulepreload" href="/vendor.js">
+  <link rel="icon" href="data:,">
+  <title>Block Hash Calculator</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin-block: 0;
+      max-inline-size: min(100dvi, 1080px);
+      margin-inline: auto;
+      background-color: hsl(216deg 50% 93%);
+      color: hsl(216deg 50% 10%);
+    }
+
+    main {
+      margin-block: 16px;
+      margin-inline: 8px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      & * {
+        font-size: 1rem;
+      }
+    }
+
+    label {
+      font-weight: 700;
+      margin-block-end: 4px;
+    }
+
+    input,
+    button {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid hsl(216deg 50% 85%);
+      outline: 2px solid transparent;
+      outline-offset: 1px;
+      margin-block-end: 8px;
+      transition: filter 300ms, border-color 300ms, outline-color 300ms;
+
+      &:hover {
+        transition: filter 150ms;
+        filter: brightness(102%);
+      }
+
+      &:focus-within {
+        transition: border-color 150ms, outline-color 150ms;
+        border-color: transparent;
+        outline-color: hsl(216deg 50% 40%);
+      }
+    }
+
+    button {
+      inline-size: fit-content;
+      cursor: pointer;
+    }
+
+    output {
+      display: none;
+      font-family: monospace;
+      transition: opacity 300ms;
+
+      @starting-style {
+        opacity: 0;
+      }
+    }
+
+    code {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Block Hash Calculator</h1>
+    <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon, BNB Chain, Optimism, and Base.</p>
+    <form>
+      <label for="num">Block number</label>
+      <input id="num" name="num" type="number" min="0" placeholder="12345678" required>
+
+      <label for="rpc">JSON-RPC</label>
+      <input id="rpc" name="rpc" type="url" placeholder="https://cloudflare-eth.com" value="https://cloudflare-eth.com" required>
+
+      <button>Calculate</button>
+
+      <output>
+        <section>
+          <h2>Block header</h2>
+          <code id="out-header"></code>
+        </section>
+        <section>
+          <h2>RLP-encoded header</h2>
+          <code id="out-rlp"></code>
+        </section>
+        <section>
+          <h2>Block hash</h2>
+          <code id="out-hash"></code>
+        </section>
+      </output>
+    </form>
+  </main>
+
+  <script type="module">
+    // ethereumjs/rlp v5.0.2
+    // noble/hashes/sha3 v1.4.0
+    import { RLP, keccak256 } from '/vendor.js';
+
+    // Uint8Array to hex string
+    function hex(array) {
+      return `0x${[...array].map(v => v.toString(16).padStart(2, '0')).join('')}`;
+    }
+
+    // Calculate the header, RLP-encoded header, and Keccak-256 hash of RLP
+    function calculate(block) {
+      // Header fields available at genesis
+      const header = [
+        block.parentHash,
+        block.sha3Uncles,
+        block.miner,
+        block.stateRoot,
+        block.transactionsRoot,
+        block.receiptsRoot,
+        block.logsBloom,
+        BigInt(block.difficulty),
+        BigInt(block.number),
+        BigInt(block.gasLimit),
+        BigInt(block.gasUsed),
+        BigInt(block.timestamp),
+        block.extraData,
+        block.mixHash,
+        BigInt(block.nonce)
+      ];
+
+      // London hard fork
+      // https://eips.ethereum.org/EIPS/eip-1559#block-hash-changing
+      if (block?.baseFeePerGas) {
+        header.push(BigInt(block.baseFeePerGas));
+      }
+
+      // Paris hard fork
+      // https://eips.ethereum.org/EIPS/eip-3675#block-structure
+      if (block.nonce === '0x0000000000000000') {
+        header[14] = '0x0000000000000000'; // MUST be string and not a number
+      }
+
+      // Shapella hard fork
+      // https://eips.ethereum.org/EIPS/eip-6465#execution-block-header-changes
+      if (block?.withdrawalsRoot) {
+        header.push(block.withdrawalsRoot);
+      }
+
+      // Dencun hard fork
+      // https://eips.ethereum.org/EIPS/eip-4844#header-extension
+      if (block?.blobGasUsed) {
+        header.push(
+          BigInt(block.blobGasUsed),
+          BigInt(block.excessBlobGas),
+          block.parentBeaconBlockRoot
+        );
+      }
+
+      const rlp = RLP.encode(header);
+      const hash = keccak256(rlp);
+
+      return {
+        header,
+        rlp: hex(rlp),
+        hash: hex(hash)
+      };
+    }
+
+    document.querySelector('form').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const { num, rpc } = Object.fromEntries(new FormData(e.target));
+      const response = await fetch(rpc, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_getBlockByNumber',
+          params: [`0x${BigInt(num).toString(16)}`, false]
+        })
+      }).then(r => r.json());
+
+      const block = response?.result;
+      if (block === undefined) {
+        return;
+      }
+      const { header, rlp, hash } = calculate(block);
+
+      document.querySelector('output').style.setProperty('display', 'unset');
+      document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+      document.querySelector('#out-rlp').textContent = rlp;
+      document.querySelector('#out-hash').textContent = hash;
+    });
+  </script>
+</body>
+
+</html>
