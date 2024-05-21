@@ -29,6 +29,24 @@
       margin: 0;
     }
 
+    p,
+    a {
+      display: inline-block;
+      margin-block-start: 8px;
+    }
+
+    a {
+      font-weight: 700;
+      text-decoration: none;
+      color: hsl(216deg 50% 40%);
+
+      &:hover,
+      &:focus-within {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+      }
+    }
+
     form {
       display: flex;
       flex-direction: column;
@@ -90,6 +108,7 @@
 <body>
   <main>
     <h1>Block Hash Calculator</h1>
+    <a href="https://github.com/ardislu/block-hash-calculator/">GitHub</a>
     <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon PoS, BNB Chain, OP Mainnet, Base, and Avalanche C-Chain.</p>
     <form>
       <label for="num">Block number</label>
