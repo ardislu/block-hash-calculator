@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="modulepreload" href="./calculate.js">
-  <link rel="modulepreload" href="./vendor.js">
+  <link rel="modulepreload" href="./vendor.min.js">
   <link rel="icon" href="data:,">
   <title>Block Hash Calculator</title>
   <style>
@@ -90,7 +90,7 @@
 <body>
   <main>
     <h1>Block Hash Calculator</h1>
-    <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon, BNB Chain, Optimism, Base, and Avalanche C-Chain.</p>
+    <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon PoS, BNB Chain, OP Mainnet, Base, and Avalanche C-Chain.</p>
     <form>
       <label for="num">Block number</label>
       <input id="num" name="num" type="number" min="0" placeholder="12345678" required>

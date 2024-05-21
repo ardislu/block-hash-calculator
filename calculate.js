@@ -1,6 +1,4 @@
-// ethereumjs/rlp v5.0.2
-// noble/hashes/sha3 v1.4.0
-import { RLP, keccak256 } from './vendor.js';
+import { RLP, keccak256 } from './vendor.min.js';
 
 // Uint8Array to hex string
 function hex(array) {
