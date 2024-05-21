@@ -89,7 +89,7 @@
 <body>
   <main>
     <h1>Block Hash Calculator</h1>
-    <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon, BNB Chain, Optimism, and Base.</p>
+    <p>Enter a block number and a JSON-RPC provider below to recalculate the block's hash from its header fields. Known supported networks: Ethereum, Polygon, BNB Chain, Optimism, Base, and Avalanche C-Chain.</p>
     <form>
       <label for="num">Block number</label>
       <input id="num" name="num" type="number" min="0" placeholder="12345678" required>
@@ -147,10 +147,23 @@
         BigInt(block.nonce)
       ];
 
+      // Avalanche Apricot Phase 1 (no specification)
+      // https://github.com/ava-labs/coreth/blob/master/README.md#block-format
+      if (block?.extDataHash) {
+        header.push(block.extDataHash);
+      }
+
       // London hard fork
       // https://eips.ethereum.org/EIPS/eip-1559#block-hash-changing
       if (block?.baseFeePerGas) {
         header.push(BigInt(block.baseFeePerGas));
+      }
+
+      // Avalanche Apricot Phase 4 (no specification)
+      // https://github.com/ava-labs/coreth/blob/f4aa91c7af01cc27b95dfc0086fd92a8174cf67c/core/types/block.go#L99
+      if (block?.extDataGasUsed) {
+        header.push(BigInt(block.extDataGasUsed));
+        header.push(BigInt(block.blockGasCost));
       }
 
       // Paris hard fork
