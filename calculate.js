@@ -23,7 +23,7 @@ function calculate(block) {
     BigInt(block.timestamp),
     block.extraData,
     block.mixHash,
-    BigInt(block.nonce)
+    block.nonce
   ];
 
   // Avalanche Apricot Phase 1 (no specification)
@@ -47,9 +47,8 @@ function calculate(block) {
 
   // Paris hard fork
   // https://eips.ethereum.org/EIPS/eip-3675#block-structure
-  if (block.nonce === '0x0000000000000000') {
-    header[14] = '0x0000000000000000'; // MUST be string and not a number
-  }
+  // Hardcodes block.nonce to '0x0000000000000000'.
+  // No code change required, just FYI.
 
   // Shapella hard fork
   // https://eips.ethereum.org/EIPS/eip-4895#new-field-in-the-execution-payload-header-withdrawals-root

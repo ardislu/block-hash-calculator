@@ -4,7 +4,7 @@ import { deepStrictEqual } from 'node:assert/strict';
 import { calculate } from './calculate.js';
 
 suite('Ethereum', { concurrency: true }, () => {
-  test('Block number 0', { skip: true, concurrency: true }, () => {
+  test('Block number 0', { concurrency: true }, () => {
     const { hash } = calculate({
       "difficulty": "0x400000000",
       "extraData": "0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa",
