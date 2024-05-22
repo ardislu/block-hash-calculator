@@ -1,0 +1,48 @@
+@page {
+  margin: 0.5in;
+}
+
+* {
+  font-family: monospace;
+  background: transparent;
+  color: #000;
+  padding: 0;
+  border: none;
+  margin: 0;
+}
+
+h1,
+p,
+a,
+button {
+  display: none;
+}
+
+label,
+h2,
+input,
+code {
+  display: block;
+  margin-block-end: 8px;
+}
+
+label,
+h2 {
+  font-size: 11pt;
+}
+
+input,
+code {
+  font-size: 10pt;
+  margin-inline-start: 16px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+  -moz-appearance: textfield;
+}
