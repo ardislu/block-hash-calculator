@@ -53,6 +53,12 @@
     document.querySelector('form').addEventListener('submit', async e => {
       e.preventDefault();
 
+      if (e.target.hasAttribute('data-loading')) {
+        return;
+      }
+      e.target.setAttribute('data-loading', '');
+      document.querySelector('output').style.setProperty('display', 'none');
+
       const { num, rpc } = Object.fromEntries(new FormData(e.target));
       const response = await fetch(rpc, {
         method: 'POST',
@@ -71,10 +77,12 @@
       }
       const { header, rlp, hash } = calculate(block);
 
-      document.querySelector('output').style.setProperty('display', 'unset');
       document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
       document.querySelector('#out-rlp').textContent = rlp;
       document.querySelector('#out-hash').textContent = hash;
+      document.querySelector('output').style.setProperty('display', 'unset');
+
+      e.target.removeAttribute('data-loading');
     });
   </script>
 </body>
