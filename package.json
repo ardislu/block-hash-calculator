@@ -11,6 +11,6 @@
   "devDependencies": {
     "@ethereumjs/rlp": "5.0.2",
     "@noble/hashes": "1.4.0",
-    "esbuild": "0.21.3"
+    "esbuild": "0.21.4"
   }
 }
