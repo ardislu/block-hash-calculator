@@ -6,7 +6,8 @@
   "scripts": {
     "build": "esbuild vendor.js --bundle --minify --format=esm --outfile=vendor.min.js",
     "pretest": "npm run build",
-    "test": "node --test"
+    "test": "node --test",
+    "test:coverage": "npm run test -- --experimental-test-coverage"
   },
   "devDependencies": {
     "@ethereumjs/rlp": "5.0.2",
