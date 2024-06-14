@@ -7,6 +7,7 @@
     "build": "esbuild vendor.js --bundle --minify --format=esm --outfile=vendor.min.js",
     "pretest": "npm run build",
     "test": "node --test",
+    "test:watch": "npm run test && node --watch --test-reporter=dot calculate.test.js",
     "test:coverage": "npm run test -- --experimental-test-coverage"
   },
   "devDependencies": {
