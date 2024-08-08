@@ -74,18 +74,17 @@
           method: 'eth_getBlockByNumber',
           params: [`0x${BigInt(num).toString(16)}`, false]
         })
-      }).then(r => r.json());
+      }).then(r => r.json()).catch(e => e);
 
       const block = response?.result;
-      if (block === undefined) {
-        return;
-      }
-      const { header, rlp, hash } = calculate(block);
+      if (block !== undefined) {
+        const { header, rlp, hash } = calculate(block);
 
-      document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
-      document.querySelector('#out-rlp').textContent = rlp;
-      document.querySelector('#out-hash').textContent = hash;
-      document.querySelector('output').style.setProperty('display', 'unset');
+        document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+        document.querySelector('#out-rlp').textContent = rlp;
+        document.querySelector('#out-hash').textContent = hash;
+        document.querySelector('output').style.setProperty('display', 'unset');
+      }
 
       e.target.removeAttribute('data-loading');
     });
