@@ -83,8 +83,13 @@
         document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
         document.querySelector('#out-rlp').textContent = rlp;
         document.querySelector('#out-hash').textContent = hash;
-        document.querySelector('output').style.setProperty('display', 'unset');
       }
+      else {
+        document.querySelector('#out-header').textContent = `Unable to retrieve block header. Error: ${response?.message ?? 'Other'}`;
+        document.querySelector('#out-rlp').textContent = 'N/A';
+        document.querySelector('#out-hash').textContent = 'N/A';
+      }
+      document.querySelector('output').style.setProperty('display', 'unset');
 
       e.target.removeAttribute('data-loading');
     });
