@@ -41,8 +41,8 @@
           <code id="out-header"></code>
         </section>
         <section>
-          <h2>RLP-encoded header</h2>
-          <code id="out-rlp"></code>
+          <h2>Encoded header</h2>
+          <code id="out-encoded"></code>
         </section>
         <section>
           <h2>Block hash</h2>
@@ -53,7 +53,7 @@
   </main>
 
   <script type="module">
-    import { calculate } from './calculate.js';
+    import { calculate, calculateZkSync } from './calculate.js';
 
     document.querySelector('form').addEventListener('submit', async e => {
       e.preventDefault();
@@ -78,15 +78,23 @@
 
       const block = response?.result;
       if (block !== undefined) {
-        const { header, rlp, hash } = calculate(block);
+        const { header, encoded, hash } = calculate(block);
 
-        document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
-        document.querySelector('#out-rlp').textContent = rlp;
-        document.querySelector('#out-hash').textContent = hash;
+        if (hash !== block.hash) { // TODO: use a better heuristic to determine if it's zkSync
+          const { header, encoded, hash } = calculateZkSync(block);
+          document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+          document.querySelector('#out-encoded').textContent = encoded;
+          document.querySelector('#out-hash').textContent = hash;
+        }
+        else {
+          document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+          document.querySelector('#out-encoded').textContent = encoded;
+          document.querySelector('#out-hash').textContent = hash;
+        }
       }
       else {
         document.querySelector('#out-header').textContent = `Unable to retrieve block header. Error: ${response?.message ?? 'Other'}`;
-        document.querySelector('#out-rlp').textContent = 'N/A';
+        document.querySelector('#out-encoded').textContent = 'N/A';
         document.querySelector('#out-hash').textContent = 'N/A';
       }
       document.querySelector('output').style.setProperty('display', 'unset');

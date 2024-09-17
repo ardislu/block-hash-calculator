@@ -5,6 +5,11 @@ function hex(array) {
   return `0x${[...array].map(v => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
+// Hex string to Uint8Array
+function arr(hex) {
+  return Uint8Array.from(hex.replace('0x', '').match(/.{2}/g), v => parseInt(v, 16));
+}
+
 // Calculate the header, RLP-encoded header, and Keccak-256 hash of RLP
 function calculate(block) {
   // Header fields available at genesis
@@ -76,9 +81,75 @@ function calculate(block) {
 
   return {
     header,
-    rlp: hex(rlp),
+    encoded: hex(rlp),
     hash: hex(hash)
   };
 }
 
-export { calculate };
+// zkSync Era ABI-encodes its block header parameters instead of RLP-encoding
+// https://docs.zksync.io/zk-stack/concepts/blocks#l2-blockhash-calculation-and-storage
+function calculateZkSync(block) {
+  // Block number 13234791 was not documented in the upgrade spec but retrieved from manual testing
+  // https://github.com/zkSync-Community-Hub/zksync-developers/discussions/87
+  if (Number(block.number) < 13234791) { // "Legacy blockhash" is keccak256(abi.encodePacked(uint32(_blockNumber)))
+    const header = [Number(block.number)];
+
+    // abi.encodePacked(uint32(_blockNumber)) is the block number literal as a big-endian uint32
+    const n = new DataView(new ArrayBuffer(4));
+    n.setUint32(0, Number(block.number), false); // Forces big-endian regardless of platform
+    const data = new Uint8Array(n.buffer);
+
+    const hash = keccak256(data);
+
+    return {
+      header,
+      encoded: hex(data),
+      hash: hex(hash)
+    };
+  }
+
+  // Non-legacy blockhash is keccak256(abi.encode(_blockNumber, _blockTimestamp, _prevL2BlockHash, _blockTxsRollingHash))
+  // where "_blockTxsRollingHash" is defined as:
+  // _blockTxsRollingHash = 0 for an empty block.
+  // _blockTxsRollingHash = keccak(0, tx1_hash) for a block with one tx.
+  // _blockTxsRollingHash = keccak(keccak(0, tx1_hash), tx2_hash) for a block with two txs, etc.
+  // Note that abi.encode() is used to concat bytes, i.e. "0" is uint32(0).
+  function blockTxsRollingHash(transactions) {
+    if (transactions.length === 0) {
+      return new Uint8Array(32);
+    }
+    let hash = keccak256(Uint8Array.from([...new Uint8Array(32), ...arr(transactions[0])]));
+    for (let i = 1; i < transactions.length; i++) {
+      hash = keccak256(Uint8Array.from([...hash, ...arr(transactions[i])]));
+    }
+    return hash;
+  }
+
+  const header = [
+    Number(block.number),
+    Number(block.timestamp),
+    block.parentHash,
+    block.transactions
+  ];
+
+  // Since each value is equal to or less than 32 bytes, abi.encode just gives each value a 32-byte slot (big-endian)
+  const data = new Uint8Array(32 * 4);
+  const n = new DataView(new ArrayBuffer(4)); // block.number
+  n.setUint32(0, Number(block.number), false);
+  data.set(new Uint8Array(n.buffer), 32 - 4);
+  const t = new DataView(new ArrayBuffer(4)); // block.timestamp
+  t.setUint32(0, Number(block.timestamp), false);
+  data.set(new Uint8Array(t.buffer), 32 * 2 - 4);
+  data.set(arr(block.parentHash), 32 * 2); // block.parentHash  
+  data.set(blockTxsRollingHash(block.transactions), 32 * 3); // blockTxsRollingHash
+
+  const hash = keccak256(data);
+
+  return {
+    header,
+    encoded: hex(data),
+    hash: hex(hash)
+  }
+}
+
+export { calculate, calculateZkSync };
