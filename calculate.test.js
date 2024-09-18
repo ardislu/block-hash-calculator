@@ -746,7 +746,7 @@ suite('Polygon zkEVM', { concurrency: true }, () => {
   });
 });
 
-suite('zkSync Era', { concurrency: true }, () => {
+suite('ZKsync Era', { concurrency: true }, () => {
   test('Block number 0', { concurrency: true }, () => {
     const { hash } = calculateZkSync({
       "baseFeePerGas": "0x0",

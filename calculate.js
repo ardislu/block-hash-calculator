@@ -86,7 +86,7 @@ function calculate(block) {
   };
 }
 
-// zkSync Era ABI-encodes its block header parameters instead of RLP-encoding
+// ZKsync Era ABI-encodes its block header parameters instead of RLP-encoding
 // https://docs.zksync.io/zk-stack/concepts/blocks#l2-blockhash-calculation-and-storage
 function calculateZkSync(block) {
   // Block number 13234791 was not documented in the upgrade spec but retrieved from manual testing
