@@ -20,7 +20,7 @@ h1 {
 
 p,
 a {
-  display: inline-block;
+  display: inline flow-root;
   margin-block-start: 8px;
 }
 
