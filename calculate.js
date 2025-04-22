@@ -129,7 +129,7 @@ function calculateZkSync(block) {
     Number(block.number),
     Number(block.timestamp),
     block.parentHash,
-    block.transactions
+    block.transactions.length === 0 ? `0x${'0'.repeat(64)}` : block.transactions
   ];
 
   // Since each value is equal to or less than 32 bytes, abi.encode just gives each value a 32-byte slot (big-endian)
