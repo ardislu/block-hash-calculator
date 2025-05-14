@@ -12,8 +12,8 @@ function arr(hex) {
 
 // Number to Uint8Array (big-endian)
 function arrBE(n) {
-  const v = new DataView(new ArrayBuffer(4));
-  v.setUint32(0, Number(n), false);
+  const v = new DataView(new ArrayBuffer(8));
+  v.setBigUint64(0, BigInt(n), false);
   return new Uint8Array(v.buffer);
 }
 
@@ -141,8 +141,8 @@ function calculateZkSync(block) {
 
   // Since each value is equal to or less than 32 bytes, abi.encode just gives each value a 32-byte slot (big-endian)
   const data = new Uint8Array(32 * 4);
-  data.set(arrBE(block.number), 32 - 4);
-  data.set(arrBE(block.timestamp), 32 * 2 - 4);
+  data.set(arrBE(block.number), 32 - 8);
+  data.set(arrBE(block.timestamp), 32 * 2 - 8);
   data.set(arr(block.parentHash), 32 * 2); // block.parentHash  
   data.set(blockTxsRollingHash(block.transactions), 32 * 3); // blockTxsRollingHash
 
