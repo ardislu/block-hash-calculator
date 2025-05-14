@@ -10,6 +10,13 @@ function arr(hex) {
   return Uint8Array.from(hex.replace('0x', '').match(/.{2}/g), v => parseInt(v, 16));
 }
 
+// Number to Uint8Array (big-endian)
+function arrBE(n) {
+  const v = new DataView(new ArrayBuffer(4));
+  v.setUint32(0, Number(n), false);
+  return new Uint8Array(v.buffer);
+}
+
 // Calculate the header, RLP-encoded header, and Keccak-256 hash of RLP
 function calculate(block) {
   // Header fields available at genesis
@@ -134,12 +141,8 @@ function calculateZkSync(block) {
 
   // Since each value is equal to or less than 32 bytes, abi.encode just gives each value a 32-byte slot (big-endian)
   const data = new Uint8Array(32 * 4);
-  const n = new DataView(new ArrayBuffer(4)); // block.number
-  n.setUint32(0, Number(block.number), false);
-  data.set(new Uint8Array(n.buffer), 32 - 4);
-  const t = new DataView(new ArrayBuffer(4)); // block.timestamp
-  t.setUint32(0, Number(block.timestamp), false);
-  data.set(new Uint8Array(t.buffer), 32 * 2 - 4);
+  data.set(arrBE(block.number), 32 - 4);
+  data.set(arrBE(block.timestamp), 32 * 2 - 4);
   data.set(arr(block.parentHash), 32 * 2); // block.parentHash  
   data.set(blockTxsRollingHash(block.transactions), 32 * 3); // blockTxsRollingHash
 
