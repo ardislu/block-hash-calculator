@@ -83,6 +83,12 @@ function calculate(block) {
     header.push(block.parentBeaconBlockRoot);
   }
 
+  // Pectra hard fork
+  // https://eips.ethereum.org/EIPS/eip-7685#block-header
+  if (block?.requestsHash) {
+    header.push(block.requestsHash);
+  }
+
   const rlp = RLP.encode(header);
   const hash = keccak256(rlp);
 
