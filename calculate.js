@@ -139,12 +139,12 @@ function calculateZkSync(block) {
     block.transactions.length === 0 ? `0x${'0'.repeat(64)}` : block.transactions
   ];
 
-  // Since each value is equal to or less than 32 bytes, abi.encode just gives each value a 32-byte slot (big-endian)
-  const data = new Uint8Array(32 * 4);
-  data.set(arrBE(block.number), 32 - 8);
-  data.set(arrBE(block.timestamp), 32 * 2 - 8);
-  data.set(arr(block.parentHash), 32 * 2); // block.parentHash  
-  data.set(blockTxsRollingHash(block.transactions), 32 * 3); // blockTxsRollingHash
+  // Manually create ABI encoded value for (uint64, uint64, bytes32, bytes32)
+  const data = new Uint8Array(32 * 4);                       // The end value will look like this in hex (offset indices for clarity):
+  data.set(arrBE(block.number), 32 - 8);                     // 00: 000000000000000000000000000000000000000000000000NNNNNNNNNNNNNNNN <-- block.number (big-endian)
+  data.set(arrBE(block.timestamp), 32 * 2 - 8);              // 32: 000000000000000000000000000000000000000000000000NNNNNNNNNNNNNNNN <-- block.timestamp (big-endian)
+  data.set(arr(block.parentHash), 32 * 2);                   // 64: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- block.parentHash
+  data.set(blockTxsRollingHash(block.transactions), 32 * 3); // 96: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- blockTxsRollingHash
 
   const hash = keccak256(data);
 
