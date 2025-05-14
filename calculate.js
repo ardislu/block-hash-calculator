@@ -12,8 +12,8 @@ function arr(hex) {
 
 // Number to Uint8Array (big-endian)
 function arrBE(n) {
-  const v = new DataView(new ArrayBuffer(8));
-  v.setBigUint64(0, BigInt(n), false);
+  const v = new DataView(new ArrayBuffer(4));
+  v.setUint32(0, Number(n), false); // Forces big-endian regardless of platform
   return new Uint8Array(v.buffer);
 }
 
@@ -108,10 +108,7 @@ function calculateZkSync(block) {
     const header = [Number(block.number)];
 
     // abi.encodePacked(uint32(_blockNumber)) is the block number literal as a big-endian uint32
-    const n = new DataView(new ArrayBuffer(4));
-    n.setUint32(0, Number(block.number), false); // Forces big-endian regardless of platform
-    const data = new Uint8Array(n.buffer);
-
+    const data = arrBE(block.number);
     const hash = keccak256(data);
 
     return {
@@ -145,10 +142,10 @@ function calculateZkSync(block) {
     block.transactions.length === 0 ? `0x${'0'.repeat(64)}` : block.transactions
   ];
 
-  // Manually create ABI encoded value for (uint64, uint64, bytes32, bytes32)
+  // Manually create ABI encoded value for (uint32, uint32, bytes32, bytes32)
   const data = new Uint8Array(32 * 4);                       // The end value will look like this in hex (offset indices for clarity):
-  data.set(arrBE(block.number), 32 - 8);                     // 00: 000000000000000000000000000000000000000000000000NNNNNNNNNNNNNNNN <-- block.number (big-endian)
-  data.set(arrBE(block.timestamp), 32 * 2 - 8);              // 32: 000000000000000000000000000000000000000000000000NNNNNNNNNNNNNNNN <-- block.timestamp (big-endian)
+  data.set(arrBE(block.number), 32 - 4);                     // 00: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.number (big-endian)
+  data.set(arrBE(block.timestamp), 32 * 2 - 4);              // 32: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.timestamp (big-endian)
   data.set(arr(block.parentHash), 32 * 2);                   // 64: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- block.parentHash
   data.set(blockTxsRollingHash(block.transactions), 32 * 3); // 96: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- blockTxsRollingHash
 
