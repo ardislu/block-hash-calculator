@@ -1365,3 +1365,58 @@ suite('Zircuit Mainnet', { concurrency: true }, () => {
     deepStrictEqual(hash, '0xd29b721809d90861ece2cbee6499ddb8b9e97a5ee1348724dfcc9588caee8a8a');
   });
 });
+
+suite('Taiko Alethia', { concurrency: true }, () => {
+  test('Block number 0', { concurrency: true }, () => {
+    const { hash } = calculate({
+      "baseFeePerGas": "0x989680",
+      "difficulty": "0x0",
+      "extraData": "0x",
+      "gasLimit": "0xe4e1c0",
+      "gasUsed": "0x0",
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "miner": "0x0000000000000000000000000000000000000000",
+      "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce": "0x0000000000000000",
+      "number": "0x0",
+      "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "size": "0x21e",
+      "stateRoot": "0x6db0b876b40a651c0a08b36e286c52afaa5d7cef7a4dc50c162704e3cc11921b",
+      "timestamp": "0x0",
+      "transactions": [],
+      "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "uncles": [],
+      "withdrawals": [],
+      "withdrawalsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+    });
+    deepStrictEqual(hash, '0x90bc60466882de9637e269e87abab53c9108cf9113188bc4f80bcfcb10e489b9');
+  });
+
+  test('Block number 1155255', { concurrency: true }, () => {
+    const { hash } = calculate({
+      "baseFeePerGas": "0x86ff51",
+      "difficulty": "0x0",
+      "extraData": "0x000000000000000000000000000000000000000000000000000000000000004b",
+      "gasLimit": "0xe51ec90",
+      "gasUsed": "0x3b477a8",
+      "logsBloom": "0xed3edda54befd99bbddf435ffe4b7c67f5ef75ce73f77fe7dfdb9af6f67fb7b1e6d5b539ec5d4d75fa7dadbdebfeae7a376bff6d786afffdfd7d1e2fbfad3bd7ff8ffdf7ceb6ddbf8aa9dcaf5f5e6fd7c5d3bfe7dee754cfb3ecf4aad7131b379acdd17ab6feffdd7bf7f6b3bfb7affbb7df9f56417fc6fb71f4bb737bd5f9eeb6f3dcfdbfbfbbfaf397afbca3ffcdb5f8ef6d7f3e5f3dba6ff53ed6d51ed0b57febb3acfa95c8ab425ef5edecf7eabb9fbfff7ff3b7fab5fbebfff97f9b5d7e7bbe7feef847b19eeb5ed7fd17dfff3bff67c7f3f9de1ddf6d77df7f2ff77699fe53f721ff3db9f68edbeb3f06fbce943e4b197dbf9f7adebfd8cd72e4cedf01",
+      "miner": "0x41f2f55571f9e8e3ba511adc48879bd67626a2b6",
+      "mixHash": "0x3e2e86a4621696070b3a8f8cb1ce311acf2189765db6f6679b2925f270b52b2a",
+      "nonce": "0x0000000000000000",
+      "number": "0x11a0b7",
+      "parentHash": "0x683cbf9edadee9e3b8315dabdc00435fc13c3568dae3d57f982171b08a0d6576",
+      "receiptsRoot": "0xed174cd1348a21ff1994afe261228d3e586efbf0f29a213a8c5421f5738e016f",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "size": "0x2d32b",
+      "stateRoot": "0x2f2707ee129d287e8bce431fa94f585a12596a6d0d54cb12c85b5add7075eecc",
+      "timestamp": "0x68282aef",
+      "transactionsRoot": "0x841a0f854b373e568ef2bd546f2d6f6fe6256c58191183b267df915d36060b4d",
+      "uncles": [],
+      "withdrawals": [],
+      "withdrawalsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+    });
+    deepStrictEqual(hash, '0x166bd4b075db4a9e114568a8a880459dbc8b82d889d67f51c660fcea9795b6c1');
+  });
+});
