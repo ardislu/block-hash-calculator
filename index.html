@@ -78,19 +78,10 @@
 
       const block = response?.result;
       if (block !== undefined) {
-        const { header, encoded, hash } = calculate(block);
-
-        if (hash !== block.hash) { // TODO: use a better heuristic to determine if it's ZKsync Era
-          const { header, encoded, hash } = calculateZkSync(block);
-          document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
-          document.querySelector('#out-encoded').textContent = encoded;
-          document.querySelector('#out-hash').textContent = hash;
-        }
-        else {
-          document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
-          document.querySelector('#out-encoded').textContent = encoded;
-          document.querySelector('#out-hash').textContent = hash;
-        }
+        const { header, encoded, hash } = block?.l1BatchTimestamp && block?.l1BatchNumber ? calculateZkSync(block) : calculate(block);
+        document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+        document.querySelector('#out-encoded').textContent = encoded;
+        document.querySelector('#out-hash').textContent = hash;
       }
       else {
         document.querySelector('#out-header').textContent = `Unable to retrieve block header. Error: ${response?.message ?? 'Other'}`;
