@@ -77,16 +77,21 @@
       }).then(r => r.json()).catch(e => e);
 
       const block = response?.result;
-      if (block !== undefined) {
+      if (block === undefined) {
+        document.querySelector('#out-header').textContent = `Unable to retrieve block header. Error: ${response?.message ?? 'Other'}`;
+        document.querySelector('#out-encoded').textContent = 'N/A';
+        document.querySelector('#out-hash').textContent = 'N/A';
+      }
+      else if (block === null) {
+        document.querySelector('#out-header').textContent = 'Unable to calculate block hash. Block number is greater than latest block.';
+        document.querySelector('#out-encoded').textContent = 'N/A';
+        document.querySelector('#out-hash').textContent = 'N/A';
+      }
+      else {
         const { header, encoded, hash } = block?.l1BatchTimestamp && block?.l1BatchNumber ? calculateZkSync(block) : calculate(block);
         document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
         document.querySelector('#out-encoded').textContent = encoded;
         document.querySelector('#out-hash').textContent = hash;
-      }
-      else {
-        document.querySelector('#out-header').textContent = `Unable to retrieve block header. Error: ${response?.message ?? 'Other'}`;
-        document.querySelector('#out-encoded').textContent = 'N/A';
-        document.querySelector('#out-hash').textContent = 'N/A';
       }
       document.querySelector('output').style.setProperty('display', 'unset');
 
