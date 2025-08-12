@@ -50,3 +50,7 @@ input::-webkit-inner-spin-button {
 input {
   -moz-appearance: textfield;
 }
+
+input::placeholder {
+  opacity: 0;
+}
