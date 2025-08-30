@@ -1,7 +1,10 @@
 {
   "type": "module",
-  "engines": {
-    "node": ">=20"
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=20.19"
+    }
   },
   "scripts": {
     "build": "esbuild vendor.js --bundle --minify --format=esm --outfile=vendor.min.js",
