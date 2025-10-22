@@ -1,16 +1,35 @@
 import { RLP, keccak256 } from './vendor.min.js';
 
-// Uint8Array to hex string
+/**
+ * Converts a `Uint8Array` into a hexadecimal string.
+ * @param {Uint8Array} array The byte array to convert.
+ * @returns {string} A hexadecimal string representation of the byte array,
+ * always prefixed with `'0x'`, with each byte padded to two digits.
+ */
 function hex(array) {
   return `0x${[...array].map(v => v.toString(16).padStart(2, '0')).join('')}`;
 }
 
-// Hex string to Uint8Array
+/**
+ * Converts a hexadecimal string into a `Uint8Array`.
+ * @param {string} hex A hexadecimal string representing a byte array.
+ * May optionally include a `'0x'` prefix. Each byte must be represented
+ * by exactly two hex digits.
+ * @returns {Uint8Array} A new byte array decoded from the hexadecimal string.
+ * @throws {Error} If the string has an odd length or contains invalid hexadecimal
+ * characters.
+ */
 function arr(hex) {
   return Uint8Array.from(hex.replace('0x', '').match(/.{2}/g), v => parseInt(v, 16));
 }
 
-// Number to Uint8Array (big-endian)
+/**
+ * Returns a 4-byte big-endian representation of a given number.
+ * @param {number|string} n A number or numeric string to encode.
+ * Values outside the 32-bit unsigned integer range will be truncated.
+ * @returns {Uint8Array} A 4-byte `Uint8Array` containing the big-endian
+ * `uint32` representation of `n`.
+ */
 function arrBE(n) {
   const v = new DataView(new ArrayBuffer(4));
   v.setUint32(0, Number(n), false); // Forces big-endian regardless of platform
