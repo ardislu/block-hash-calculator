@@ -167,6 +167,35 @@ suite('Ethereum', { concurrency: true }, () => {
     });
     deepStrictEqual(hash, '0x50c8cab760b2948349c590461b166773c45d8f4858cccf5a43025ab2960152e8');
   });
+
+  test('Block number 23935694 (Fusaka)', { concurrency: true }, () => {
+    const { hash } = calculate({
+        "baseFeePerGas": "0x1df20bc",
+        "blobGasUsed": "0x120000",
+        "difficulty": "0x0",
+        "excessBlobGas": "0x60000",
+        "extraData": "0xe29ca82051756173617220287175617361722e77696e2920e29ca8",
+        "gasLimit": "0x392a1ae",
+        "gasUsed": "0x1fe3120",
+        "logsBloom": "0xfffdfffffffffffffffffffffffffffffffffffffffffffffffffbffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffff",
+        "miner": "0x396343362be2a4da1ce0c1c210945346fb82aa49",
+        "mixHash": "0x2daccc66aa6ca9cb45b1498ab06252267018d50a30e5a399e588b1bd8f8553fb",
+        "nonce": "0x0000000000000000",
+        "number": "0x16d3ace",
+        "parentBeaconBlockRoot": "0x24f825d13a58c2aef66786519c48477b475672506538a610441d17d405889f2b",
+        "parentHash": "0xe739e49cf9f9f704e0f9e0cbe7174b63e3704b6b57c83575d783e1acb578f704",
+        "receiptsRoot": "0x9e7fe0132055811314808fde708b76ea2e119cff98682b5994725d5720ce90d9",
+        "requestsHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+        "size": "0x325f3",
+        "stateRoot": "0xa852ef67db7acd739779aa1dbf96d6919b54b99cde5de7945b57a4a17e2c901b",
+        "timestamp": "0x6930b063",
+        "transactionsRoot": "0x79d5157ca8347d4d27fedc92d417d986f92858d8f4bfebf8fe49a11a0df38534",
+        "uncles": [],
+        "withdrawalsRoot": "0x31f85c322b8a666c7e53c763bb2f23aca32ad0c3074f43b0ba9075a1da94720f"
+    });
+    deepStrictEqual(hash, '0x8281db4990564caca17e620a70847c7b001ad70cd7bb5e64aa78adea16747677');
+  });
 });
 
 suite('Polygon PoS', { concurrency: true }, () => {
