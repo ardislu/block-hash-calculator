@@ -89,7 +89,7 @@
       }
       else {
         const { header, encoded, hash } = block?.l1BatchTimestamp && block?.l1BatchNumber ? calculateZkSync(block) : calculate(block);
-        document.querySelector('#out-header').textContent = `[\n  ${header.join(',\n  ')}\n]`;
+        document.querySelector('#out-header').textContent = JSON.stringify(header, (_, v) => typeof v === 'bigint' ? v.toString() : v, 2).replaceAll('"', '');
         document.querySelector('#out-encoded').textContent = encoded;
         document.querySelector('#out-hash').textContent = hash;
       }
