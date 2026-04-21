@@ -39,7 +39,7 @@ function arrBE(n) {
 // Calculate the header, RLP-encoded header, and Keccak-256 hash of RLP
 function calculate(block) {
   // Header fields available at genesis
-  const header = [
+  let header = [
     block.parentHash,
     block.sha3Uncles,
     block.miner,
@@ -106,6 +106,17 @@ function calculate(block) {
   // https://eips.ethereum.org/EIPS/eip-7685#block-header
   if (block?.requestsHash) {
     header.push(block.requestsHash);
+  }
+
+  // Tempo
+  // https://github.com/tempoxyz/tempo/blob/2c8e3e9977537c5c2367b29aa5a613cb1d47968d/crates/primitives/src/header.rs#L24-L27
+  if (block?.timestampMillisPart) {
+    header = [
+      BigInt(block.mainBlockGeneralGasLimit),
+      BigInt(block.sharedGasLimit),
+      BigInt(block.timestampMillisPart),
+      header
+    ];
   }
 
   const rlp = RLP.encode(header);

@@ -170,29 +170,29 @@ suite('Ethereum', { concurrency: true }, () => {
 
   test('Block number 23935694 (Fusaka)', { concurrency: true }, () => {
     const { hash } = calculate({
-        "baseFeePerGas": "0x1df20bc",
-        "blobGasUsed": "0x120000",
-        "difficulty": "0x0",
-        "excessBlobGas": "0x60000",
-        "extraData": "0xe29ca82051756173617220287175617361722e77696e2920e29ca8",
-        "gasLimit": "0x392a1ae",
-        "gasUsed": "0x1fe3120",
-        "logsBloom": "0xfffdfffffffffffffffffffffffffffffffffffffffffffffffffbffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffff",
-        "miner": "0x396343362be2a4da1ce0c1c210945346fb82aa49",
-        "mixHash": "0x2daccc66aa6ca9cb45b1498ab06252267018d50a30e5a399e588b1bd8f8553fb",
-        "nonce": "0x0000000000000000",
-        "number": "0x16d3ace",
-        "parentBeaconBlockRoot": "0x24f825d13a58c2aef66786519c48477b475672506538a610441d17d405889f2b",
-        "parentHash": "0xe739e49cf9f9f704e0f9e0cbe7174b63e3704b6b57c83575d783e1acb578f704",
-        "receiptsRoot": "0x9e7fe0132055811314808fde708b76ea2e119cff98682b5994725d5720ce90d9",
-        "requestsHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
-        "size": "0x325f3",
-        "stateRoot": "0xa852ef67db7acd739779aa1dbf96d6919b54b99cde5de7945b57a4a17e2c901b",
-        "timestamp": "0x6930b063",
-        "transactionsRoot": "0x79d5157ca8347d4d27fedc92d417d986f92858d8f4bfebf8fe49a11a0df38534",
-        "uncles": [],
-        "withdrawalsRoot": "0x31f85c322b8a666c7e53c763bb2f23aca32ad0c3074f43b0ba9075a1da94720f"
+      "baseFeePerGas": "0x1df20bc",
+      "blobGasUsed": "0x120000",
+      "difficulty": "0x0",
+      "excessBlobGas": "0x60000",
+      "extraData": "0xe29ca82051756173617220287175617361722e77696e2920e29ca8",
+      "gasLimit": "0x392a1ae",
+      "gasUsed": "0x1fe3120",
+      "logsBloom": "0xfffdfffffffffffffffffffffffffffffffffffffffffffffffffbffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7fffffffffffffffffffffffffffffffffffffff",
+      "miner": "0x396343362be2a4da1ce0c1c210945346fb82aa49",
+      "mixHash": "0x2daccc66aa6ca9cb45b1498ab06252267018d50a30e5a399e588b1bd8f8553fb",
+      "nonce": "0x0000000000000000",
+      "number": "0x16d3ace",
+      "parentBeaconBlockRoot": "0x24f825d13a58c2aef66786519c48477b475672506538a610441d17d405889f2b",
+      "parentHash": "0xe739e49cf9f9f704e0f9e0cbe7174b63e3704b6b57c83575d783e1acb578f704",
+      "receiptsRoot": "0x9e7fe0132055811314808fde708b76ea2e119cff98682b5994725d5720ce90d9",
+      "requestsHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "size": "0x325f3",
+      "stateRoot": "0xa852ef67db7acd739779aa1dbf96d6919b54b99cde5de7945b57a4a17e2c901b",
+      "timestamp": "0x6930b063",
+      "transactionsRoot": "0x79d5157ca8347d4d27fedc92d417d986f92858d8f4bfebf8fe49a11a0df38534",
+      "uncles": [],
+      "withdrawalsRoot": "0x31f85c322b8a666c7e53c763bb2f23aca32ad0c3074f43b0ba9075a1da94720f"
     });
     deepStrictEqual(hash, '0x8281db4990564caca17e620a70847c7b001ad70cd7bb5e64aa78adea16747677');
   });
@@ -1507,5 +1507,79 @@ suite('Hemi', { concurrency: true }, () => {
       "withdrawalsRoot": "0x3c02fe0e41900e6f41b710696b27ed26ab3e8534e6682d69be464ecd962c6d3b"
     });
     deepStrictEqual(hash, '0x9e36e54280690bfab4a35e3b3daf1e25465fffeaa0f6a52d5cc64bdc2d0a6f55');
+  });
+});
+
+suite('Tempo', { concurrency: true }, () => {
+  test('Block number 0', { concurrency: true }, () => {
+    const { hash } = calculate({
+      "mainBlockGeneralGasLimit": "0x0",
+      "sharedGasLimit": "0x0",
+      "timestampMillisPart": "0x0",
+      "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "miner": "0x0000000000000000000000000000000000000000",
+      "stateRoot": "0x83408974323f63ab969b23f0fe1dba30d7ee5dc5c524a975bae38187eaa2c7f6",
+      "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "difficulty": "0x0",
+      "number": "0x0",
+      "gasLimit": "0x1dcd6500",
+      "gasUsed": "0x0",
+      "timestamp": "0x0",
+      "extraData": "0x00687c3cb4fb7123e100ca45a358a2df35ab116172489435cc6c61586a4d6317e3000000000403a217bb85001d4dcf8e5c50136f77af88cb2cab1857279b91c6240f41cca95c4f43f6dcab3e0dfb87dafb3ecbeb6251e90a5df2e6c47432482821cd8b84665ee4642589d2d9628a92b03e2bbfb00e006d038cd98def76d2a41b7c228c05f5a193a670f82d003fd1941452f02d95c8ff3b9b4fdce1d330b3d1ab3bedb17eb6dfc3e3b3503c1fb1c0050f772badba9b7c6f055cd3c4dd2613fd6763f245efd5fe83eb8086b10e82d31d6879c44cb04dfd21c22b29b0a967c15b4cd6adcca8868807b1311d01b57f78b6df0c6514271ec6ea944fe76c867002fa6915d393ec2cf142ba77e7ef53913d666082ea6abdec87da0097596fba8ae3661b0ec0f42b7041fcf44e325d8a6cedd4d228c768fc3a4ccf12e68800460ad29043cc4a8e5e16e9780445dd2bdd91cf0597b8d6dd0632e0fed836aa7c35addc89752c034801bcb3acae5bb7bf314c85c8753d9f38171420d001268d941c391948add16f33ca7ea8c79882bb74d4a1461bbc72bfdb6988f47fac5e21c36d33c6d84a72e3edf8995d431689dbf7ef3c69bccb6ff5fb68cbebff5145cb4a42bc108b5be6453c901f9e6bc80445dd2bdd91cf0597b8d6dd0632e0fed836aa7c35addc89752c034801bcb3acae5bb7bf314c85c8753d9f38171420d001268d941c391948add16f33ca7ea8c79882bb74d4a1461bbc72bfdb6988f47fac5e21c36d33c6d84a72e3edf8995d431689dbf7ef3c69bccb6ff5fb68cbebff5145cb4a42bc108b5be6453c901f9e6bc8000445dd2bdd91cf0597b8d6dd0632e0fed836aa7c35addc89752c034801bcb3acae5bb7bf314c85c8753d9f38171420d001268d941c391948add16f33ca7ea8c79882bb74d4a1461bbc72bfdb6988f47fac5e21c36d33c6d84a72e3edf8995d431689dbf7ef3c69bccb6ff5fb68cbebff5145cb4a42bc108b5be6453c901f9e6bc800",
+      "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce": "0x0000000000000042",
+      "baseFeePerGas": "0x2540be400",
+      "withdrawalsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "blobGasUsed": "0x0",
+      "excessBlobGas": "0x0",
+      "parentBeaconBlockRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "requestsHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": "0x539",
+      "timestampMillis": "0x0",
+      "uncles": [],
+      "transactions": [],
+      "withdrawals": []
+    });
+    deepStrictEqual(hash, '0x49d7ec7085e77bf5a403d0fcb4cfc42a4084a89dfff60477579c5e09c9e03c54');
+  });
+
+  test('Block number 15890847', { concurrency: true }, () => {
+    const { hash } = calculate({
+      "mainBlockGeneralGasLimit": "0x1c9c380",
+      "sharedGasLimit": "0x2faf080",
+      "timestampMillisPart": "0x268",
+      "parentHash": "0xa6bf9c7dfd9d43201e870f5f09277b1f0de1b8fc2ac010bc9cf19b3dd7e8d411",
+      "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+      "miner": "0xf13e0864d58bd8e7587ce0985dd554334e759a40",
+      "stateRoot": "0xec7addda4e1d2c2f1cd621f2a0831c608b6b15d399bf5a25f9ecb3828aea4ee4",
+      "transactionsRoot": "0x2f76feb3a67d73d6fa707e40ac7c688bd067f440bcb1aa2134992ff65947cd9d",
+      "receiptsRoot": "0xb64408da6b8fe39ab764af88ece1e8cca1c35fd988db57806e99138c629365a0",
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "difficulty": "0x0",
+      "number": "0xf2799f",
+      "gasLimit": "0x1dcd6500",
+      "gasUsed": "0x0",
+      "timestamp": "0x69e71f5f",
+      "extraData": "0x",
+      "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "nonce": "0x0000000000000000",
+      "baseFeePerGas": "0x4a817c800",
+      "withdrawalsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+      "blobGasUsed": "0x0",
+      "excessBlobGas": "0x0",
+      "parentBeaconBlockRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "requestsHash": "0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": "0x2bf",
+      "timestampMillis": "0x19daed28d80",
+      "uncles": [],
+      "transactions": [
+        "0x896d1835ccd4b27ee37e85b10beb85591f2228daf6c74e3a04fafc8cb48aa730"
+      ],
+      "withdrawals": []
+    });
+    deepStrictEqual(hash, '0x6599e1fe537ebf615f53225bc33069c3023184a5d4bc223855308d974e3927f8');
   });
 });
