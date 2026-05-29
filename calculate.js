@@ -96,6 +96,13 @@ function calculate(block) {
     ];
   }
 
+  // Tempo T4
+  // https://github.com/tempoxyz/tempo/blob/main/tips/tip-1031.md
+  if (block?.consensusContext) {
+    const { epoch, view, parentView, proposer } = block.consensusContext;
+    header.push([epoch, view, parentView, proposer]);
+  }
+
   const rlp = RLP.encode(header);
   const hash = keccak256(rlp);
 
