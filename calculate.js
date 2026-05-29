@@ -1,29 +1,6 @@
 import { RLP, keccak256 } from './vendor.min.js';
 
 /**
- * Converts a `Uint8Array` into a hexadecimal string.
- * @param {Uint8Array} array The byte array to convert.
- * @returns {string} A hexadecimal string representation of the byte array,
- * always prefixed with `'0x'`, with each byte padded to two digits.
- */
-function hex(array) {
-  return `0x${[...array].map(v => v.toString(16).padStart(2, '0')).join('')}`;
-}
-
-/**
- * Converts a hexadecimal string into a `Uint8Array`.
- * @param {string} hex A hexadecimal string representing a byte array.
- * May optionally include a `'0x'` prefix. Each byte must be represented
- * by exactly two hex digits.
- * @returns {Uint8Array} A new byte array decoded from the hexadecimal string.
- * @throws {Error} If the string has an odd length or contains invalid hexadecimal
- * characters.
- */
-function arr(hex) {
-  return Uint8Array.from(hex.replace('0x', '').match(/.{2}/g), v => parseInt(v, 16));
-}
-
-/**
  * Returns a 4-byte big-endian representation of a given number.
  * @param {number|string} n A number or numeric string to encode.
  * Values outside the 32-bit unsigned integer range will be truncated.
@@ -124,8 +101,8 @@ function calculate(block) {
 
   return {
     header,
-    encoded: hex(rlp),
-    hash: hex(hash)
+    encoded: `0x${rlp.toHex()}`,
+    hash: `0x${hash.toHex()}`
   };
 }
 
@@ -143,8 +120,8 @@ function calculateZkSync(block) {
 
     return {
       header,
-      encoded: hex(data),
-      hash: hex(hash)
+      encoded: `0x${data.toHex()}`,
+      hash: `0x${hash.toHex()}`
     };
   }
 
@@ -158,9 +135,9 @@ function calculateZkSync(block) {
     if (transactions.length === 0) {
       return new Uint8Array(32);
     }
-    let hash = keccak256(Uint8Array.from([...new Uint8Array(32), ...arr(transactions[0])]));
+    let hash = keccak256(Uint8Array.from([...new Uint8Array(32), ...Uint8Array.fromHex(transactions[0].replace('0x', ''))]));
     for (let i = 1; i < transactions.length; i++) {
-      hash = keccak256(Uint8Array.from([...hash, ...arr(transactions[i])]));
+      hash = keccak256(Uint8Array.from([...hash, ...Uint8Array.fromHex(transactions[i].replace('0x', ''))]));
     }
     return hash;
   }
@@ -173,18 +150,18 @@ function calculateZkSync(block) {
   ];
 
   // Manually create ABI encoded value for (uint32, uint32, bytes32, bytes32)
-  const data = new Uint8Array(32 * 4);                       // The end value will look like this in hex (offset indices for clarity):
-  data.set(arrBE(block.number), 32 - 4);                     // 00: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.number (big-endian)
-  data.set(arrBE(block.timestamp), 32 * 2 - 4);              // 32: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.timestamp (big-endian)
-  data.set(arr(block.parentHash), 32 * 2);                   // 64: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- block.parentHash
-  data.set(blockTxsRollingHash(block.transactions), 32 * 3); // 96: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- blockTxsRollingHash
+  const data = new Uint8Array(32 * 4);                                      // The end value will look like this in hex (offset indices for clarity):
+  data.set(arrBE(block.number), 32 - 4);                                    // 00: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.number (big-endian)
+  data.set(arrBE(block.timestamp), 32 * 2 - 4);                             // 32: 00000000000000000000000000000000000000000000000000000000NNNNNNNN <-- block.timestamp (big-endian)
+  data.set(Uint8Array.fromHex(block.parentHash.replace('0x', '')), 32 * 2); // 64: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- block.parentHash
+  data.set(blockTxsRollingHash(block.transactions), 32 * 3);                // 96: HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH <-- blockTxsRollingHash
 
   const hash = keccak256(data);
 
   return {
     header,
-    encoded: hex(data),
-    hash: hex(hash)
+    encoded: `0x${data.toHex()}`,
+    hash: `0x${hash.toHex()}`
   }
 }
 
