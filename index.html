@@ -92,6 +92,9 @@
         document.querySelector('#out-header').textContent = JSON.stringify(header, (_, v) => typeof v === 'bigint' ? v.toString() : v, 2).replaceAll('"', '');
         document.querySelector('#out-encoded').textContent = encoded;
         document.querySelector('#out-hash').textContent = hash;
+        if (num === '') {
+          e.target.elements.num.value = Number(block.number);
+        }
       }
       document.querySelector('output').style.setProperty('display', 'unset');
 
