@@ -14,8 +14,8 @@
     "test:coverage": "npm run test -- --experimental-test-coverage"
   },
   "devDependencies": {
-    "@ethereumjs/rlp": "10.1.1",
+    "@ethereumjs/rlp": "10.1.2",
     "@noble/hashes": "2.2.0",
-    "esbuild": "0.28.0"
+    "esbuild": "0.28.1"
   }
 }
